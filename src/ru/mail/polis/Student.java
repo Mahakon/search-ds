@@ -25,8 +25,18 @@ public class Student extends CheckedOpenHashTableEntity {
 
     @Override
     public int hashCode(int tableSize, int probId) throws IllegalArgumentException {
-        //todo: реализуйте этот метод
-        return 0;
+        return Math.abs(hashFirstArg(tableSize) + probId * hashLastArg(tableSize)) % tableSize;
+    }
+
+    private int hashFirstArg(int tableSize) {
+        return Math.abs(hashCode(31)) % tableSize;
+    }
+
+    private int hashLastArg(int tableSIze) {
+        int hash = (int) (tableSIze * (0.6180339887 * Math.abs(hashCode(29))
+                - (int) (0.6180339887 * Math.abs(hashCode(29)))));
+
+        return hash + (1 - (hash % 2));
     }
 
     public enum  Gender {
@@ -123,20 +133,20 @@ public class Student extends CheckedOpenHashTableEntity {
         return mobile != null ? mobile.equals(student.mobile) : student.mobile == null;
     }
 
-    @Override
-    public int hashCode() {
+    public int hashCode(int arg) {
         int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + firstName.hashCode();
-        result = 31 * result + lastName.hashCode();
-        result = 31 * result + gender.hashCode();
-        result = 31 * result + birthday.hashCode();
-        result = 31 * result + groupId;
-        result = 31 * result + yearOfAdmission;
-        result = 31 * result + (photoReference != null ? photoReference.hashCode() : 0);
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (mobile != null ? mobile.hashCode() : 0);
+        result = arg * result + firstName.hashCode();
+        result = arg * result + lastName.hashCode();
+        result = arg * result + gender.hashCode();
+        result = arg * result + birthday.hashCode();
+        result = arg * result + groupId;
+        result = arg * result + yearOfAdmission;
+        result = arg * result + (photoReference != null ? photoReference.hashCode() : 0);
+        result = arg * result + (email != null ? email.hashCode() : 0);
+        result = arg * result + (mobile != null ? mobile.hashCode() : 0);
         return result;
     }
+
 
     @Override
     public String toString() {
